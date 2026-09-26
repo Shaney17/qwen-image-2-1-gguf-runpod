@@ -1,6 +1,12 @@
 # RunPod Serverless: ComfyUI + ComfyUI-GGUF (leejet fork) + Qwen-Image 2.1 Uncensored GGUF
-# Base: official runpod/worker-comfyui image (ComfyUI 0.34.0, handler nhận input.workflow)
+# Base: official runpod/worker-comfyui image (handler nhận input.workflow)
 FROM runpod/worker-comfyui:5.10.0-base
+
+# Qwen-Image 2.1 nodes arrived in ComfyUI v0.37.0; the worker base ships v0.34.0.
+ARG COMFYUI_REF=v0.37.0
+RUN git -C /comfyui fetch --depth 1 origin tag ${COMFYUI_REF} \
+ && git -C /comfyui checkout ${COMFYUI_REF} \
+ && uv pip install -r /comfyui/requirements.txt
 
 # ---------------------------------------------------------------------------
 # 1. Custom node: bản fork leejet (bản city96 trên Registry KHÔNG hỗ trợ qwen_image21)
